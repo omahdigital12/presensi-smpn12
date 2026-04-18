@@ -929,13 +929,15 @@ function login(){
     return;
   }
 
-  // 🔒 TOMBOL DIKUNCI
   btn.disabled = true;
   btn.classList.add('loading-state');
   text.innerText = 'Memproses...';
 
   fetch(GAS_URL, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       action: "login",
       nisn: nisn
@@ -947,7 +949,6 @@ function login(){
     if(!res.status){
       alert('NISN tidak ditemukan');
 
-      // ⛔ RESET TOMBOL
       btn.disabled = false;
       btn.classList.remove('loading-state');
       text.innerText = 'Masuk';
