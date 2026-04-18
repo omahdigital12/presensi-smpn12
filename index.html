@@ -904,21 +904,46 @@ let cacheModerasi = {};
 let cachePresensi = {};
 let selectedModerasi = null;
 let selectedPresensi = null;
+
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzPzktqIY0Qvc_4s1HEz54aIZR-oqC9VPcZLW2yI509yQoNgesPeR2B1mWiJKV381pN/exec";
+
+function loginGAS(nisn){
+  return fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "login",
+      nisn: nisn
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => res.json());
+}  
 function login(){
   const btn = document.getElementById('btnMasuk');
   const text = document.getElementById('btnText');
   const nisn = document.getElementById('nisn').value.trim();
+
   if(!nisn){
     alert('Masukkan NISN');
     return;
   }
 
-  // 🔒 TOMBOL DIKUNCI & TEKS DIGANTI
+  // 🔒 TOMBOL DIKUNCI
   btn.disabled = true;
   btn.classList.add('loading-state');
   text.innerText = 'Memproses...';
 
-  google.script.run.withSuccessHandler(res=>{
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "login",
+      nisn: nisn
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+
     if(!res.status){
       alert('NISN tidak ditemukan');
 
@@ -930,13 +955,22 @@ function login(){
     }
 
     user = res;
+
     document.getElementById('login').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
+
     document.getElementById('nama').innerText = res.nama;
     document.getElementById('nisnView').innerText = res.nisn;
 
     loadBeranda();
-  }).loginNISN(nisn);
+  })
+  .catch(err=>{
+    alert('Gagal koneksi ke server');
+
+    btn.disabled = false;
+    btn.classList.remove('loading-state');
+    text.innerText = 'Masuk';
+  });
 }
 
 function updateDateTime(){
@@ -977,10 +1011,18 @@ function loadBeranda(){
     </div>
   `;
 
-  google.script.run.withSuccessHandler(data=>{
-    cacheBeranda = data; // simpan cache
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "getBeranda",
+      nisn: user.nisn
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    cacheBeranda = data;
     renderBeranda(data);
-  }).getRiwayatPresensi(user.nisn);
+  });
 }
 
 function renderBeranda(data){
@@ -1056,10 +1098,20 @@ function loadRiwayatModerasi(){
     </div>
   `;
 
-  google.script.run.withSuccessHandler(data=>{
-    cacheModerasi[key] = data; // simpan cache
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "getModerasi",
+      nisn: user.nisn,
+      tahun: th,
+      bulan: bl
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    cacheModerasi[key] = data;
     renderModerasi(data);
-  }).getModerasiByBulan(user.nisn, th, bl);
+  });
 }
 
 function renderModerasi(data){
@@ -1184,15 +1236,58 @@ function kirimModerasi(){
     const reader = new FileReader();
     reader.onload = function(e){
       const content = e.target.result.split(',')[1];
-      google.script.run
-        .withSuccessHandler(successHandler)
-        .submitModerasi(user.nisn, tglAwal, tglAkhir, keterangan, file.name, content);
+  
+      fetch(GAS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          action: "submitModerasi",
+          nisn: user.nisn,
+          tglAwal: tglAwal,
+          tglAkhir: tglAkhir,
+          keterangan: keterangan,
+          fileName: file.name,
+          fileBase64: content
+        })
+      })
+      .then(res => res.json())
+      .then(successHandler)
+      .catch(()=>{
+        btnKirim.disabled = false;
+        btnKirim.innerText = 'Kirim';
+        statusDiv.style.color = 'red';
+        statusDiv.innerText = '❌ Gagal koneksi ke server';
+      });
+  
     };
     reader.readAsDataURL(file);
+  
   }else{
-    google.script.run
-      .withSuccessHandler(successHandler)
-      .submitModerasi(user.nisn, tglAwal, tglAkhir, keterangan, '', '');
+    fetch(GAS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "submitModerasi",
+        nisn: user.nisn,
+        tglAwal: tglAwal,
+        tglAkhir: tglAkhir,
+        keterangan: keterangan,
+        fileName: '',
+        fileBase64: ''
+      })
+    })
+    .then(res => res.json())
+    .then(successHandler)
+    .catch(()=>{
+      btnKirim.disabled = false;
+      btnKirim.innerText = 'Kirim';
+      statusDiv.style.color = 'red';
+      statusDiv.innerText = '❌ Gagal koneksi ke server';
+    });
   }
 }
 
@@ -1242,10 +1337,20 @@ function loadPresensiBulanan(){
     </div>
   `;
 
-  google.script.run.withSuccessHandler(data=>{
-    cachePresensi[key] = data; // simpan cache
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "getPresensi",
+      nisn: user.nisn,
+      tahun: th,
+      bulan: bl
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    cachePresensi[key] = data;
     renderPresensi(data);
-  }).getPresensiBulanan(user.nisn, th, bl);
+  });
 }
 
 function renderPresensi(data){
