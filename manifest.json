@@ -1,0 +1,20 @@
+{
+  "name": "Presensi SMPN 12 Pekalongan",
+  "short_name": "Presensi",
+  "start_url": "https://script.google.com/macros/s/AKfycbzPzktqIY0Qvc_4s1HEz54aIZR-oqC9VPcZLW2yI509yQoNgesPeR2B1mWiJKV381pN/exec",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#1976d2",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

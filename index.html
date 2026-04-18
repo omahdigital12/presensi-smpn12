@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+
+  <style>
+    body{margin:0;font-family:Arial;background:#f5f5f5}
+    .login{
+      min-height:100vh;          /* 🔥 setinggi layar */
+      padding:20px;
+      display:flex;              /* 🔥 aktifkan flex */
+      flex-direction:column;     /* 🔥 susun ke bawah */
+      justify-content:flex-start;
+      padding-top:120px;
+      padding-left:40px;      /* 🔥 kiri */
+      padding-right:40px;     /* 🔥 kanan */
+    }
+
+    .hidden{display:none}
+
+    .overlayVisible {
+      display: flex !important; /* paksa tampil */
+    }
+
+    input,button{
+      width:100%;padding:12px;font-size:36px;margin-top:10px
+    }
+
+    button{
+      background:#1976d2;color:#fff;border:none;border-radius:6px
+    }
+
+    /* HEADER */
+    .header{
+      position:fixed;
+      top:0; left:0; right:0;
+      background:#fff;
+      padding-top:10px;
+      padding-bottom:10px;
+      padding-left:16px;
+      padding-right:16px;
+
+      display:flex;              /* 🔥 WAJIB */
+      flex-direction:row;        /* 🔥 ICON KIRI */
+      align-items:center;        /* 🔥 TENGAH VERTIKAL */
+      gap:12px;
+
+      box-shadow:0 2px 5px rgba(0,0,0,.1);
+      z-index:10;
+    }
+
+    /* ICON */
+    .user-icon{
+      font-size:80px;
+      color:#1976d2;
+      flex-shrink:0;             /* 🔥 AGAR TIDAK TURUN */
+    }
+
+    /* TEXT */
+    .user-text{
+      display:flex;
+      flex-direction:column;     /* 🔥 NAMA ATAS, NISN BAWAH */
+    }
+
+    /* NAMA */
+    .nama{
+      font-size:36px;
+      font-weight:bold;
+    }
+
+    /* NISN */
+    .nisn{
+      font-size:36px;
+      color:#555;
+    }
+
+    /* HEADER PRESENSI */
+    .presensi-header{
+      background:#1976d2;
+      color:#fff;
+      text-align:center;
+      padding:16px 12px;
+      border-radius:10px;
+      margin-bottom:16px;
+    }
+
+    .presensi-title{
+      font-size:48px;
+      font-weight:bold;
+      letter-spacing:1px;
+    }
+
+    .presensi-school{
+      font-size:36px;
+      margin-bottom:10px;
+    }
+
+    .presensi-datetime{
+      font-size:32px;
+      opacity:0.95;
+    }
+
+    #jamNow{
+      font-size:40px;
+      font-weight:bold;
+    }
+
+
+
+    /* CONTENT */
+    .content {
+      padding:150px 40px 140px;
+      overflow-y:auto;   /* wajib */
+      -webkit-overflow-scrolling: touch; /* smooth scroll iOS */
+    }
+
+    .riwayat-title{
+      font-size:48px;
+      font-weight:bold;
+      letter-spacing:1px;
+      margin-top:36px;
+      margin-bottom:24px;
+    }
+
+    /* CARD PRESENSI */
+    .card{
+      background:#fff;margin-bottom:15px;
+      padding:24px;border-radius:8px;
+      display:flex;justify-content:space-between;
+      box-shadow:0 1px 3px rgba(0,0,0,.1);
+      border-left:15px solid #e53935 /* 🔴 GARIS MERAH */
+    }
+    .hari{font-size:42px;font-weight:bold}
+    .tanggal{font-size:32px;color:#666}
+    .status{font-size:32px;color:#666}
+    .jam{font-size:42px;font-weight:bold}
+
+    /* JARAK VERTIKAL */
+    .card{
+      align-items:center;
+    }
+
+    /* BOTTOM NAV (Beranda, Moderasi, Presensi, QR Code) */
+    .nav{
+      position:fixed;bottom:0;left:0;right:0;
+      background:#fff;display:flex;
+      border-top:1px solid #ddd
+    }
+
+    .nav div{
+      flex:1;
+      text-align:center;
+      padding:10px;
+      font-size:36px;
+      color:#777;
+      transition:.2s;
+    }
+
+    .nav .material-icons{
+      font-size:56px;   /* samakan dengan teks */
+    }
+
+    /* MENU AKTIF */
+    .nav div.active{
+      color:#1976d2;
+      font-weight:bold;
+    }
+
+    /* ICON AKTIF */
+    .nav div.active .material-icons{
+      color:#1976d2;
+    }
+
+    .filter-moderasi{
+      display:flex;
+      align-items:stretch;
+      gap:8px;
+      margin-bottom:16px;
+    }
+
+    .filter-moderasi select,
+    .filter-moderasi button{
+      flex:1;
+      height:70px;
+      padding:0 16px;
+      font-size:36px;
+      box-sizing:border-box;
+      margin-top:0 !important;
+    }
+
+    /* SELECT */
+    .filter-moderasi select{
+      background:#fff;
+      border:1px solid #ccc;
+      appearance:none;
+      -webkit-appearance:none;
+      text-align:center;
+      text-align-last:center;
+    }
+
+    /* TAHUN – PALING SEMPIT */
+    .filter-moderasi select:first-child{
+      width:240px;
+      flex:0 0 240px;
+    }
+
+    /* BULAN – SEDANG */
+    .filter-moderasi select:nth-child(2){
+      width:280px;
+      flex:0 0 280px;
+    }
+
+    /* BUTTON TAMPILKAN */
+    .filter-moderasi button{
+      width:70px;
+      flex:0 0 70px;
+      height:70px;
+      padding:0;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* ICON SEARCH */
+    .filter-moderasi button .material-icons{
+      font-size:48px;
+    }
+
+    #moderasi .riwayat-title{
+      margin-top: 0;
+    }
+
+    .moderasi-item{
+      background:#fff;
+      padding:24px;
+      border-radius:8px;
+      margin-bottom:15px;
+      display:flex;
+      justify-content:space-between;
+      box-shadow:0 1px 3px rgba(0,0,0,.1);
+    }
+
+    .moderasi-item{
+      border-left:15px solid #fb8c00;
+    }
+
+    .moderasi-tgl{
+      font-size:38px;
+      font-weight:bold;
+    }
+
+    .moderasi-ket{
+      font-size:32px;
+      color:#666;
+    }
+
+    .status-disetujui{
+      color:#2e7d32;
+      font-weight:bold;
+      font-size:38px;
+      white-space:nowrap;
+    }
+
+    /* FORM MODERASI */
+    #overlayModerasi input:not([type="file"]),
+    #overlayModerasi select{
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+      text-align: center;
+      text-align-last: center;
+    }
+
+    #overlayModerasi input,
+    #overlayModerasi select{
+      height:60px;           /* 🔥 lebih pendek dari default */
+      padding:6px 10px;
+      font-size:28px;
+      border-radius:12px; /* 🔥 INI yang bikin melengkung */
+    }
+
+    /* JARAK ANTAR FIELD */
+    #overlayModerasi label{
+      display:block;
+      margin-top:30px;       /* 🔥 jarak antar input */
+      margin-bottom:4px;
+      font-size:36px;
+    }
+
+    #overlayModerasi input[type="file"]{
+      margin-top:6px;
+      font-size:28px;
+      border-radius:12px;
+    }
+
+    /* EFEK TOMBOL DITEKAN */
+    #overlayModerasi button{
+      transition:0.15s;
+    }
+
+    #overlayModerasi button:active{
+      transform:scale(0.96);           /* 🔥 efek ditekan */
+      opacity:0.85;
+    }
+
+    #btnTambahModerasi{
+      width:150px !important;        /* 🔥 ukuran */
+      height:150px !important;       /* 🔥 ukuran */
+      border-radius:50% !important;  /* 🔥 biar bulat */
+
+      bottom:200px !important;       /* posisi */
+      right:40px !important;         /* posisi */
+
+      font-size:90px !important;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1;
+    }
+
+    #presensi .riwayat-title{
+      margin-top: 0;
+    }
+
+    /* PERBESAR QR CODE */
+    #qrKode #qrcode {
+      width: 800px;   /* 🔥 perbesar */
+      height: 800px;
+      margin: 20px auto;
+    }
+
+    #qrcode img{
+      width:100%;
+      height:100%;
+    }
+
+    #qrKode h3{
+      font-size:56px;
+      margin-bottom:24px;
+    }
+
+    #btnDownloadQR{
+      position:fixed;
+
+      width:150px !important;
+      height:150px !important;
+      border-radius:50% !important;
+
+      bottom:200px !important;
+      right:40px !important;
+
+      background:#1976d2;
+      color:#fff;
+      border:none;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      box-shadow:0 3px 6px rgba(0,0,0,0.2);
+      cursor:pointer;
+    }
+
+    #btnDownloadQR .material-icons{
+      font-size:90px;   /* atur sesuai selera */
+    }
+
+    /* LOGOUT ICON */
+    .logout-btn{
+      margin-left:auto;        /* 🔥 dorong ke kanan */
+      cursor:pointer;
+      color:#e53935;
+      font-size:56px;
+    }
+
+    /* LOGIN HEADER */
+    .login-header{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:30px;
+    }
+
+    .login-header .logo img{
+      width:90px;
+      height:90px;
+      object-fit:contain;
+    }
+
+    .login-title{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .login-title h3{
+      margin:0;
+      font-size:40px;
+    }
+
+    .login-title small{
+      font-size:28px;
+      color:#555;
+    }
+
+    /* TEKS PETUNJUK LOGIN */
+    .login-desc{
+      font-size:36px;
+      color:#555;
+      margin-bottom:30px;
+    }
+
+    .login input{
+      margin-bottom:30px;   /* 🔥 jarak ke tombol */
+    }
+
+    /* SAMAKAN BENTUK INPUT NISN & TOMBOL MASUK */
+    .login input,
+    .login button{
+      height:80px;           /* 🔥 tinggi SAMA */
+      border-radius:12px;    /* 🔥 sudut SAMA */
+      font-size:36px;
+    }
+
+    /* RAPikan INPUT agar tidak lebih tinggi */
+    .login input{
+      padding:0 16px;        /* kiri–kanan saja */
+      text-align:center;
+      box-sizing:border-box;
+    }
+
+    /* 🔒 KUNCI INTERAKSI HANYA SAAT LOGIN */
+    #login{
+      height:100vh;
+      overflow:hidden;
+      touch-action:none;              /* matikan pinch zoom */
+      overscroll-behavior:contain;
+    }
+
+    /* INPUT & TOMBOL MASIH BOLEH DIKLIK */
+    #login input,
+    #login button{
+      touch-action:manipulation;
+    }
+
+    /* STATE TOMBOL SAAT DIKLIK */
+    button.loading-state{
+      background:#4caf50 !important; /* 🔥 hijau */
+      cursor:not-allowed;
+    }
+
+    .header-filter{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .header-filter .riwayat-title{
+      margin:0; /* hilangkan jarak atas */
+    }
+
+    .icon-kalender {
+      font-size: 72px;   /* 🔥 perbesar ikon */
+      color: #1976d2;    /* 🔵 warna biru */
+      cursor: pointer;
+    }
+
+    .label-bulan{
+      font-size:32px;
+      color:#555;
+      margin-top:4px;
+    }
+
+    .loader{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:40px 0;
+    }
+
+    .spinner{
+      width:48px;
+      height:48px;
+      border:5px solid #ddd;
+      border-top:5px solid #1976d2;
+      border-radius:50%;
+      animation:spin 0.8s linear infinite;
+    }
+
+    @keyframes spin{
+      0%{ transform:rotate(0deg); }
+      100%{ transform:rotate(360deg); }
+    }
+
+    /* =========================
+      PILIHAN TAHUN & BULAN
+    ========================= */
+
+    /* 🔵 HEADER BIRU */
+    .flatpickr-months {
+      background: #1976d2 !important;
+      color: white !important;
+      height: 110px !important;
+      border-radius: 12px 12px 0 0;
+      display: flex !important;
+      align-items: center !important;   /* center vertikal */
+      justify-content: center !important; /* center horizontal */
+      position: relative;
+    }
+
+    /* BULAN + TAHUN */
+    .flatpickr-current-month {
+      color: white !important;
+      font-size: 36px !important;
+
+      padding: 0 !important;     /* 🔥 HAPUS padding aneh */
+      margin: 0 !important;
+
+      line-height: 1.2 !important;
+    }
+
+    /* INPUT TAHUN */
+    .flatpickr-current-month input.cur-year {
+      text-align: center !important;
+      font-size: 36px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+
+      height: auto !important;
+      line-height: 1.2 !important;
+
+      background: transparent !important;
+      color: white !important;
+    }
+
+    /* 🔼 PANAH (BIARKAN POSISI DEFAULT) */
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      top: 30px !important;
+    }
+
+    .flatpickr-prev-month {
+      left: 140px !important;
+      right: auto !important;   /* 🔥 WAJIB */
+    }
+
+    .flatpickr-next-month {
+      right: 140px !important;
+      left: auto !important;    /* 🔥 WAJIB */
+    }
+
+    /* SEMBUNYIKAN SVG ASLI */
+    .flatpickr-prev-month svg,
+    .flatpickr-next-month svg {
+      display: none;
+    }
+
+    /* PANAH KIRI */
+    .flatpickr-prev-month::before {
+      content: "‹";
+      font-size: 70px;
+      font-weight: 500;   /* 🔥 super tebal */
+      color: white;
+    }
+
+    /* PANAH KANAN */
+    .flatpickr-next-month::before {
+      content: "›";
+      font-size: 70px;
+      font-weight: 500;   /* 🔥 super tebal */
+      color: white;
+    }
+
+    /* 📦 ISI PUTIH */
+    .flatpickr-innerContainer {
+      background: white;
+      border-radius: 0 0 12px 12px;
+      padding: 20px;
+    }
+
+    /* 🔘 GRID BULAN */
+    .flatpickr-monthSelect-months {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 70px;
+
+      justify-items: center !important; /* 🔥 ini kunci */
+    }
+
+    /* versi font besar */
+    .flatpickr-monthSelect-month {
+      display: grid !important;
+      place-items: center !important;
+
+      font-size: 36px !important;
+
+      height: 90px;
+      width: 90px;
+
+      border-radius: 50%;
+    }
+
+        /* 🔵 BULAN TERPILIH */
+    .flatpickr-monthSelect-month.selected {
+      background: #1976d2 !important; /* biru */
+      color: #fff !important;
+    }
+
+    /* 📦 MODAL POSISI TENGAH */
+    .flatpickr-calendar.open {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+
+      width: 95% !important;
+      max-width: 620px;
+
+      max-height: 150vh;
+      overflow: hidden;
+
+      z-index: 9999 !important;
+      border-radius: 12px;
+    }
+
+    #overlayKalender.overlayVisible{
+      display:block !important;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+
+  <div class="login-header">
+    <div class="logo">
+      <img src="https://drive.google.com/thumbnail?id=1z9k3IYDyz5XoXURavCzlg29g2bHoUhW0" alt="Logo Sekolah">
+    </div>
+
+    <div class="login-title">
+      <h3>LOGIN PRESENSI</h3>
+      <small>SMP Negeri 12 Pekalongan</small>
+    </div>
+  </div>
+
+  <div class="login-desc">
+    Silahkan masuk ke akun anda untuk mengakses aplikasi
+  </div>
+
+  <!-- TYPE TEXT agar NISN 0 depan tidak hilang -->
+  <input type="text" id="nisn" placeholder="Masukkan NISN"
+       inputmode="numeric" pattern="[0-9]*" maxlength="10">
+  <button id="btnMasuk" onclick="login()">
+    <span id="btnText">Masuk</span>
+  </button>
+
+</div>
+
+<!-- APP -->
+<div class="app hidden" id="app">
+  <div class="header">
+    <span class="material-icons user-icon">person</span>
+
+    <div class="user-text">
+      <div class="nama" id="nama"></div>
+      <div class="nisn" id="nisnView"></div>
+    </div>
+    <!-- LOGOUT ICON -->
+    <span class="material-icons logout-btn" onclick="logout()">logout</span>
+  </div>
+
+  <div class="content">
+    <!-- KHUSUS BERANDA -->
+    <div id="berandaWrapper">
+      <div class="presensi-header">
+        <div class="presensi-title">PRESENSI</div>
+        <div class="presensi-school">SMP NEGERI 12 PEKALONGAN</div>
+
+        <div class="presensi-datetime">
+          <div id="tglNow"></div>
+          <div id="jamNow"></div>
+        </div>
+      </div>
+      <div>
+        <!-- BARIS ALAMAT -->
+        <div style="
+          display:flex;
+          align-items:flex-start;
+          gap:12px;
+        ">
+          <span class="material-icons" style="
+            font-size:40px;
+            color:#1976d2;
+            margin-top:4px;
+          ">
+            place
+          </span>
+
+          <div style="
+            font-size:30px;
+            color:#333;
+            line-height:1.4;
+          ">
+            Jln. Pantaisari 2 Pekalongan, Kelurahan Panjang Wetan, 
+            Kec. Pekalongan Utara, Kota Pekalongan
+          </div>
+        </div>
+
+        <!-- TOMBOL BUKA MAP -->
+        <div onclick="window.open('https://maps.google.com/?q=SMP+Negeri+12+Pekalongan','_blank')"
+            style="
+              margin-top:16px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              gap:8px;
+              background:#1976d2;
+              color:#fff;
+              padding:14px;
+              border-radius:8px;
+              font-size:32px;
+              font-weight:bold;
+              cursor:pointer;
+            ">
+          <span class="material-icons">map</span>
+          BUKA MAP
+        </div>
+
+      </div>
+      <div class="riwayat-title">RIWAYAT PRESENSI</div>
+      <div id="beranda">
+        <i>Memuat data...</i>
+      </div>
+    </div>
+
+    <!-- MODERASI -->
+    <div id="moderasi" class="hidden">
+      <div class="header-filter">
+        <div>
+          <div class="riwayat-title">MODERASI</div>
+          <div id="labelModerasi" class="label-bulan">-</div>
+        </div>
+        <span class="material-icons icon-kalender" id="iconModerasi">calendar_today</span>
+      </div>
+      <input type="text" id="modTanggal" style="width: 1px;height: 1px;opacity:0; position:absolute; pointer-events:auto;">
+      <div id="listModerasi"></div>
+
+      <!-- Tombol Tambah Moderasi -->
+      <button id="btnTambahModerasi" 
+              style="
+                position:fixed;
+                right:20px;
+                width:150px;
+                height:150px;
+                border-radius:50%;
+                background:#1976d2;
+                color:#fff;
+                font-size:90px;
+                border:none;
+                box-shadow:0 3px 6px rgba(0,0,0,0.2);
+                cursor:pointer;
+              ">+</button>
+      <!-- Form Moderasi Overlay -->
+      <div id="overlayModerasi" class="hidden" 
+          style="
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.5);justify-content:center;align-items:center;
+            z-index:100;
+          ">
+        <div style="
+              background:#fff;padding:30px;border-radius:16px;width:95%;max-width:620px;min-height:750px;
+              box-shadow:0 3px 6px rgba(0,0,0,0.2);
+            ">
+          <h3 style="font-size:36px;">Buat Moderasi</h3>
+          <label>Tanggal Awal</label>
+          <input type="date" id="tglAwal">
+          <label>Tanggal Akhir</label>
+          <input type="date" id="tglAkhir">
+          <label>Keterangan</label>
+          <select id="ketModerasi">
+            <option value="">-- Pilih Keterangan --</option>
+            <option value="Sakit">Sakit</option>
+            <option value="Izin">Izin</option>
+          </select>
+          <label>Upload Surat</label>
+          <input type="file" id="fileSurat">
+          
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
+            <button onclick="kirimModerasi()" 
+              style="flex:1;background:#1976d2;color:#fff;
+                    height:60px;font-size:36px;border-radius:8px;
+                    display:flex;align-items:center;justify-content:center;">
+              Kirim
+            </button>
+
+            <button onclick="tutupFormModerasi()" 
+              style="flex:1;background:#ccc;color:#000;
+                    height:60px;font-size:36px;border-radius:8px;
+                    display:flex;align-items:center;justify-content:center;">
+              Batal
+            </button>
+          </div>
+          <div id="statusModerasi"
+              style="
+                margin-top:12px;
+                font-size:28px;
+                text-align:center;
+                display:none;
+              ">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESENSI -->
+    <div id="presensi" class="hidden">
+      <div class="header-filter">
+        <div>
+          <div class="riwayat-title">PRESENSI</div>
+          <div id="labelPresensi" class="label-bulan">-</div>
+        </div>
+        <span class="material-icons icon-kalender" id="iconPresensi">calendar_today</span>
+      </div>
+      <input type="text" id="presTanggal" style="width: 1px;height: 1px;opacity:0; position:absolute; pointer-events:auto;">
+      <div id="listPresensi"></div>
+
+    </div>
+
+    <div id="overlayKalender" class="hidden" style="
+        position:fixed;
+        top:0;left:0;
+        width:100%;height:100%;
+        background:rgba(0,0,0,0.5);
+        z-index:9998;
+      "></div>
+
+  </div>
+
+  <!-- PROFIL → QR KODE -->
+  <div id="qrKode" class="hidden" style="text-align:center;padding:20px;">
+    <h3>QR Code Presensi</h3>
+    <div id="qrcode"></div>
+    <button id="btnDownloadQR" 
+            style="
+              position:fixed;
+              bottom:150px;
+              right:20px;
+              border-radius:50%;
+              background:#1976d2;
+              color:#fff;
+              font-size:28px;
+              border:none;
+              box-shadow:0 3px 6px rgba(0,0,0,0.2);
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              cursor:pointer;
+            ">
+      <span class="material-icons">arrow_downward</span>
+    </button>
+
+  </div>
+
+  <div class="nav">
+    <div id="menuBeranda" onclick="loadBeranda()">
+      <span class="material-icons">home</span><br>
+      Beranda
+    </div>
+
+    <div id="menuModerasi" onclick="loadModerasi()">
+      <span class="material-icons">fact_check</span><br>
+      Moderasi
+    </div>
+
+    <div id="menuPresensi" onclick="loadPresensi()">
+      <span class="material-icons">how_to_reg</span><br>
+      Presensi
+    </div>
+
+    <div id="menuQR" onclick="loadQR()">
+      <span class="material-icons">qr_code</span><br>
+      QR Code
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+let user = {}
+let cacheBeranda = null;
+let cacheModerasi = {};
+let cachePresensi = {};
+let selectedModerasi = null;
+let selectedPresensi = null;
+function login(){
+  const btn = document.getElementById('btnMasuk');
+  const text = document.getElementById('btnText');
+  const nisn = document.getElementById('nisn').value.trim();
+  if(!nisn){
+    alert('Masukkan NISN');
+    return;
+  }
+
+  // 🔒 TOMBOL DIKUNCI & TEKS DIGANTI
+  btn.disabled = true;
+  btn.classList.add('loading-state');
+  text.innerText = 'Memproses...';
+
+  google.script.run.withSuccessHandler(res=>{
+    if(!res.status){
+      alert('NISN tidak ditemukan');
+
+      // ⛔ RESET TOMBOL
+      btn.disabled = false;
+      btn.classList.remove('loading-state');
+      text.innerText = 'Masuk';
+      return;
+    }
+
+    user = res;
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('nama').innerText = res.nama;
+    document.getElementById('nisnView').innerText = res.nisn;
+
+    loadBeranda();
+  }).loginNISN(nisn);
+}
+
+function updateDateTime(){
+  const now = new Date();
+
+  const hari = now.toLocaleDateString('id-ID', { weekday:'long' });
+  const tanggal = now.toLocaleDateString('id-ID', {
+    day:'2-digit', month:'long', year:'numeric'
+  });
+
+  const jam = now.toLocaleTimeString('id-ID');
+
+  document.getElementById('tglNow').innerText = hari + ', ' + tanggal;
+  document.getElementById('jamNow').innerText = jam;
+}
+
+// update tiap detik
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+
+function loadBeranda(){
+  setActiveMenu('menuBeranda');
+  document.getElementById('berandaWrapper').classList.remove('hidden');
+  document.getElementById('moderasi').classList.add('hidden');
+  document.getElementById('presensi').classList.add('hidden');
+  document.getElementById('qrKode').classList.add('hidden');
+
+  // 🔥 CEK CACHE
+  if(cacheBeranda){
+    renderBeranda(cacheBeranda);
+    return;
+  }
+
+  document.getElementById('beranda').innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+    </div>
+  `;
+
+  google.script.run.withSuccessHandler(data=>{
+    cacheBeranda = data; // simpan cache
+    renderBeranda(data);
+  }).getRiwayatPresensi(user.nisn);
+}
+
+function renderBeranda(data){
+  if(data.length === 0){
+    document.getElementById('beranda').innerHTML =
+      '<i>Belum ada data presensi</i>';
+    return;
+  }
+
+  let html='';
+  data.forEach(d=>{
+    html+=`
+    <div class="card">
+      <div class="left">
+        <div class="hari">${d.hari}</div>
+        <div class="tanggal">${d.tanggal}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="status">${d.status}</div>
+        <div class="jam">${d.jam}</div>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('beranda').innerHTML = html;
+}
+
+function loadModerasi(){
+  setActiveMenu('menuModerasi');
+  document.getElementById('berandaWrapper').classList.add('hidden');
+  document.getElementById('moderasi').classList.remove('hidden');
+  document.getElementById('presensi').classList.add('hidden');
+  document.getElementById('qrKode').classList.add('hidden');
+
+  // 🔥 DEFAULT BULAN BERJALAN
+  if(!selectedModerasi){
+    const now = new Date();
+    const bulan = String(now.getMonth() + 1).padStart(2,'0');
+    const tahun = now.getFullYear();
+    selectedModerasi = `${tahun}-${bulan}`;
+  }
+
+  document.getElementById('modTanggal').value = selectedModerasi;
+  document.getElementById('labelModerasi').innerText =
+    formatBulanTahun(selectedModerasi);
+
+  // 🔥 load data
+  loadRiwayatModerasi();
+  }
+
+function loadRiwayatModerasi(){
+  const val = document.getElementById('modTanggal').value;
+
+  if(!val){
+    document.getElementById('listModerasi').innerHTML =
+      '<i>Pilih bulan terlebih dahulu</i>';
+    return;
+  }
+
+  const [th, bl] = val.split('-');
+
+  const key = th + '-' + bl;
+
+  // 🔥 CEK CACHE
+  if(cacheModerasi[key]){
+    renderModerasi(cacheModerasi[key]);
+    return;
+  }
+
+  document.getElementById('listModerasi').innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+    </div>
+  `;
+
+  google.script.run.withSuccessHandler(data=>{
+    cacheModerasi[key] = data; // simpan cache
+    renderModerasi(data);
+  }).getModerasiByBulan(user.nisn, th, bl);
+}
+
+function renderModerasi(data){
+  if(data.length === 0){
+    document.getElementById('listModerasi').innerHTML =
+      '<i style="font-size:36px;">Tidak ada data moderasi</i>';
+    return;
+  }
+
+  let html = '';
+  data.forEach(d=>{
+    html += `
+      <div class="moderasi-item">
+        <div>
+          <div class="moderasi-tgl">${d.tanggal}</div>
+          <div class="moderasi-ket">${d.keterangan}</div>
+        </div>
+        <div class="status-disetujui">${d.status}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById('listModerasi').innerHTML = html;
+}
+
+// Tampilkan form saat tombol + ditekan
+document.getElementById('btnTambahModerasi').addEventListener('click',()=>{
+  const overlay = document.getElementById('overlayModerasi');
+  overlay.classList.remove('hidden');
+  overlay.classList.add('overlayVisible');
+});
+
+// Tutup form
+function tutupFormModerasi(){
+  const overlay = document.getElementById('overlayModerasi');
+  overlay.classList.add('hidden');
+  overlay.classList.remove('overlayVisible');
+  // Reset form
+  document.getElementById('tglAwal').value='';
+  document.getElementById('tglAkhir').value='';
+  document.getElementById('ketModerasi').value='';
+  document.getElementById('fileSurat').value='';
+  document.getElementById('statusModerasi').style.display = 'none';
+}
+
+
+// Kirim moderasi ke Apps Script
+function kirimModerasi(){
+  const statusDiv = document.getElementById('statusModerasi');
+  const btnKirim = document.querySelector('#overlayModerasi button');
+  const tglAwal = document.getElementById('tglAwal').value;
+  const tglAkhir = document.getElementById('tglAkhir').value;
+  const keterangan = document.getElementById('ketModerasi').value;
+
+  if(!tglAwal || !tglAkhir){
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = 'red';
+    statusDiv.innerText = 'Tanggal awal dan akhir wajib diisi';
+    return;
+  }
+
+  if(new Date(tglAkhir) < new Date(tglAwal)){
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = 'red';
+    statusDiv.innerText = 'Tanggal akhir tidak boleh sebelum tanggal awal';
+    return;
+  }
+
+  if(!keterangan){
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = 'red';
+    statusDiv.innerText = 'Pilih keterangan terlebih dahulu';
+    return;
+  }
+
+  const file = document.getElementById('fileSurat').files[0];
+
+  // 🔥 VALIDASI FILE WAJIB
+  if(!file){
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = 'red';
+    statusDiv.innerText = 'Surat izin wajib dilampirkan';
+    return;
+  }
+
+  // 🔄 STATUS AWAL
+  statusDiv.style.display = 'block';
+  statusDiv.style.color = '#555';
+  statusDiv.innerText = 'Mengirim data ...';
+  // 🔥 KUNCI TOMBOL
+  btnKirim.disabled = true;
+  btnKirim.innerText = 'Mengirim...';
+
+  const successHandler = (res)=>{
+    btnKirim.disabled = false;
+    btnKirim.innerText = 'Kirim';
+    if(res === 'success'){
+      statusDiv.style.color = 'green';
+      statusDiv.innerText = '✅ Moderasi berhasil';
+
+      // 🔥 HAPUS CACHE BIAR AMBIL DATA BARU
+      const val = document.getElementById('modTanggal').value;
+      const [th, bl] = val.split('-');
+      const key = th + '-' + bl;
+      delete cacheModerasi[key];
+
+      loadRiwayatModerasi();
+
+      // tutup otomatis
+      setTimeout(()=>{
+        tutupFormModerasi();
+        statusDiv.style.display = 'none';
+      }, 1500);
+
+    }else{
+      statusDiv.style.color = 'red';
+      statusDiv.innerText = '❌ Gagal mengirim moderasi';
+    }
+  };
+
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const content = e.target.result.split(',')[1];
+      google.script.run
+        .withSuccessHandler(successHandler)
+        .submitModerasi(user.nisn, tglAwal, tglAkhir, keterangan, file.name, content);
+    };
+    reader.readAsDataURL(file);
+  }else{
+    google.script.run
+      .withSuccessHandler(successHandler)
+      .submitModerasi(user.nisn, tglAwal, tglAkhir, keterangan, '', '');
+  }
+}
+
+function loadPresensi(){
+  setActiveMenu('menuPresensi');
+  document.getElementById('berandaWrapper').classList.add('hidden');
+  document.getElementById('moderasi').classList.add('hidden');
+  document.getElementById('presensi').classList.remove('hidden');
+  document.getElementById('qrKode').classList.add('hidden');
+
+  if(!selectedPresensi){
+    const now = new Date();
+    const tahun = now.getFullYear();
+    const bulan = String(now.getMonth() + 1).padStart(2,'0');
+    selectedPresensi = `${tahun}-${bulan}`;
+  }
+
+  document.getElementById('presTanggal').value = selectedPresensi;
+  document.getElementById('labelPresensi').innerText =
+    formatBulanTahun(selectedPresensi);
+
+  // 🔥 cukup 1x
+  loadPresensiBulanan();
+}
+
+function loadPresensiBulanan(){
+  const val = document.getElementById('presTanggal').value;
+
+  if(!val){
+    alert('Pilih bulan terlebih dahulu');
+    return;
+  }
+
+  const [th, bl] = val.split('-');
+
+  const key = th + '-' + bl;
+
+  // 🔥 CEK CACHE
+  if(cachePresensi[key]){
+    renderPresensi(cachePresensi[key]);
+    return;
+  }
+
+  document.getElementById('listPresensi').innerHTML = `
+    <div class="loader">
+      <div class="spinner"></div>
+    </div>
+  `;
+
+  google.script.run.withSuccessHandler(data=>{
+    cachePresensi[key] = data; // simpan cache
+    renderPresensi(data);
+  }).getPresensiBulanan(user.nisn, th, bl);
+}
+
+function renderPresensi(data){
+  let html = '';
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  data.forEach(d => {
+    let info = d.info;
+    const tglData = new Date(d.rawTanggal);
+    tglData.setHours(0,0,0,0);
+
+    let statusLower = info.toLowerCase();
+
+    // hanya ubah jika BELUM tanggalnya dan status = tidak hadir
+    if(tglData > today && statusLower === 'tidak hadir'){
+      info = '-';
+      statusLower = '-'; // 🔥 update juga biar konsisten
+    }
+
+    // tentukan warna teks berdasarkan info
+    let color = '#000'; // hitam
+
+    if(statusLower === 'tidak hadir'){
+      color = 'red';
+    } else if(statusLower === 'sakit' || statusLower === 'izin'){
+      color = 'orange';
+    }
+
+    html += `
+      <div class="card">
+        <div class="left">
+          <div class="hari">${d.hari}</div>
+          <div class="tanggal">${d.tanggal}</div>
+        </div>
+        <div style="text-align:right; color:${color}">
+          <div class="jam">${info}</div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('listPresensi').innerHTML = html;
+}
+
+function loadQR(){
+  setActiveMenu('menuQR');
+
+  // Sembunyikan menu lain
+  document.getElementById('berandaWrapper').classList.add('hidden');
+  document.getElementById('moderasi').classList.add('hidden');
+  document.getElementById('presensi').classList.add('hidden');
+  document.getElementById('qrKode').classList.remove('hidden');
+
+  // Hapus QR lama jika ada
+  document.getElementById('qrcode').innerHTML = '';
+
+  // Buat QR Code baru
+  const qrcode = new QRCode(document.getElementById('qrcode'), {
+    text: user.nisn,
+    width: 600,
+    height: 600,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+
+  // Tombol download
+  document.getElementById('btnDownloadQR').onclick = function(){
+    const qrCanvas = document.querySelector('#qrcode canvas');
+    const qrImg = document.querySelector('#qrcode img');
+
+    if(qrCanvas){
+      const link = document.createElement('a');
+      link.href = qrCanvas.toDataURL('image/png');
+      link.download = `QR_NISN_${user.nisn}.png`;
+      link.click();
+    }else if(qrImg){
+      const link = document.createElement('a');
+      link.href = qrImg.src;
+      link.download = `QR_NISN_${user.nisn}.png`;
+      link.click();
+    }else{
+      alert('QR Code belum siap');
+    }
+  };
+}
+
+function setActiveMenu(menuId){
+  document.querySelectorAll('.nav div')
+    .forEach(m => m.classList.remove('active'));
+
+  document.getElementById(menuId).classList.add('active');
+}
+
+function logout(){
+  // keluar fullscreen jika aktif
+  if(document.fullscreenElement){
+    document.exitFullscreen();
+  }
+
+  // reset data
+  user = {};
+  cacheBeranda = null;
+  cacheModerasi = {};
+  cachePresensi = {};
+
+  // tampilkan login, sembunyikan app
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+
+  // bersihkan input
+  document.getElementById('nisn').value = '';
+
+  // 🔁 RESET TOMBOL LOGIN
+  const btn = document.getElementById('btnMasuk');
+  const text = document.getElementById('btnText');
+
+  btn.disabled = false;
+  btn.classList.remove('loading-state');
+  text.innerText = 'Masuk';
+}
+
+function formatBulanTahun(val){
+  if(!val) return '-';
+
+  const [th, bl] = val.split('-');
+
+  const namaBulan = [
+    "Januari","Februari","Maret","April","Mei","Juni",
+    "Juli","Agustus","September","Oktober","November","Desember"
+  ];
+
+  return 'Bulan ' + namaBulan[parseInt(bl)-1] + ' ' + th;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+
+  flatpickr("#modTanggal", {
+    disableMobile: true,
+    clickOpens: false,
+    altInput: false,
+    altFormat: "F Y",
+    dateFormat: "Y-m",
+    locale: "id",
+
+    // 🔥 TAMBAHKAN INI
+    onChange: function(selectedDates, dateStr){
+      selectedModerasi = dateStr;
+      document.getElementById('labelModerasi').innerText = formatBulanTahun(dateStr);
+      loadRiwayatModerasi();
+
+      // 🔥 TAMBAHAN INI
+      const overlay = document.getElementById('overlayKalender');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('overlayVisible');
+
+      this.close(); // tutup kalender
+    },
+
+    onClose: function(){
+      const overlay = document.getElementById('overlayKalender');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('overlayVisible');
+    },
+
+    plugins: [
+      new monthSelectPlugin({
+        shorthand: true,
+        dateFormat: "Y-m",
+        altFormat: "F Y"
+      })
+    ]
+  });
+
+  flatpickr("#presTanggal", {
+    disableMobile: true,
+    clickOpens: false,
+    altInput: false,
+    altFormat: "F Y",
+    dateFormat: "Y-m",
+    locale: "id",
+
+    // 🔥 TAMBAHKAN INI
+    onChange: function(selectedDates, dateStr){
+      selectedPresensi = dateStr;
+      document.getElementById('labelPresensi').innerText = formatBulanTahun(dateStr);
+      loadPresensiBulanan();
+
+      // 🔥 TAMBAHAN INI
+      const overlay = document.getElementById('overlayKalender');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('overlayVisible');
+
+      this.close(); // tutup kalender
+    },
+
+    onClose: function(){
+      const overlay = document.getElementById('overlayKalender');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('overlayVisible');
+    },
+
+    plugins: [
+      new monthSelectPlugin({
+        shorthand: true,
+        dateFormat: "Y-m",
+        altFormat: "F Y"
+      })
+    ]
+  });
+  document.getElementById('iconModerasi').addEventListener('click', () => {
+    const overlay = document.getElementById('overlayKalender');
+    overlay.classList.remove('hidden');
+    overlay.classList.add('overlayVisible');
+
+    const fp = document.getElementById('modTanggal')._flatpickr;
+    if(fp) fp.open();
+  });
+
+  document.getElementById('iconPresensi').addEventListener('click', () => {
+    const overlay = document.getElementById('overlayKalender');
+    overlay.classList.remove('hidden');
+    overlay.classList.add('overlayVisible');
+
+    const fp = document.getElementById('presTanggal')._flatpickr;
+    if(fp) fp.open();
+  });
+
+  document.getElementById('overlayKalender').addEventListener('click', () => {
+    const overlay = document.getElementById('overlayKalender');
+
+    // 🔥 HAPUS DUA-DUANYA
+    overlay.classList.add('hidden');
+    overlay.classList.remove('overlayVisible');
+
+    const fp1 = document.getElementById('modTanggal')._flatpickr;
+    const fp2 = document.getElementById('presTanggal')._flatpickr;
+
+    if(fp1) fp1.close();
+    if(fp2) fp2.close();
+  });
+
+});
+
+
+</script>
+
+</body>
+</html>
