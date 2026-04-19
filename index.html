@@ -905,7 +905,7 @@ let cachePresensi = {};
 let selectedModerasi = null;
 let selectedPresensi = null;
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwK_zKSTZeX2cxyq6vp9pBzWMqUB_xRQGX2mq7F0KSvYMujFi-Di90OBIy2ld6btKds/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxH_aPwoFEBjuP3Ied7MH3HdHWlEDuF47zszWr8kAXda7qaKPaZyxt6G_Md1AMuuRud/exec";
 
 function loginGAS(nisn){
   return fetch(GAS_URL, {
@@ -935,12 +935,11 @@ function login(){
 
   fetch(GAS_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "login",
-      nisn: nisn
+    body: new URLSearchParams({
+      data: JSON.stringify({
+        action: "login",
+        nisn: nisn
+      })
     })
   })
   .then(res => res.json())
