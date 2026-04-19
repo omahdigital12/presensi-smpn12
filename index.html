@@ -1243,9 +1243,6 @@ function kirimModerasi(){
   
       fetch(GAS_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: new URLSearchParams({
           data: JSON.stringify({
             action: "submitModerasi",
