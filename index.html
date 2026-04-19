@@ -1013,9 +1013,11 @@ function loadBeranda(){
 
   fetch(GAS_URL, {
     method: "POST",
-    body: JSON.stringify({
-      action: "getBeranda",
-      nisn: user.nisn
+    body: new URLSearchParams({
+      data: JSON.stringify({
+        action: "getBeranda",
+        nisn: user.nisn
+      })
     })
   })
   .then(res => res.json())
@@ -1100,11 +1102,13 @@ function loadRiwayatModerasi(){
 
   fetch(GAS_URL, {
     method: "POST",
-    body: JSON.stringify({
-      action: "getModerasi",
-      nisn: user.nisn,
-      tahun: th,
-      bulan: bl
+    body: new URLSearchParams({
+      data: JSON.stringify({
+        action: "getModerasi",
+        nisn: user.nisn,
+        tahun: th,
+        bulan: bl
+      })
     })
   })
   .then(res => res.json())
@@ -1242,14 +1246,16 @@ function kirimModerasi(){
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          action: "submitModerasi",
-          nisn: user.nisn,
-          tglAwal: tglAwal,
-          tglAkhir: tglAkhir,
-          keterangan: keterangan,
-          fileName: file.name,
-          fileBase64: content
+        body: new URLSearchParams({
+          data: JSON.stringify({
+            action: "submitModerasi",
+            nisn: user.nisn,
+            tglAwal: tglAwal,
+            tglAkhir: tglAkhir,
+            keterangan: keterangan,
+            fileName: file.name,
+            fileBase64: content
+          })
         })
       })
       .then(res => res.json())
@@ -1339,11 +1345,13 @@ function loadPresensiBulanan(){
 
   fetch(GAS_URL, {
     method: "POST",
-    body: JSON.stringify({
-      action: "getPresensi",
-      nisn: user.nisn,
-      tahun: th,
-      bulan: bl
+    body: new URLSearchParams({
+      data: JSON.stringify({
+        action: "getPresensi",
+        nisn: user.nisn,
+        tahun: th,
+        bulan: bl
+      })
     })
   })
   .then(res => res.json())
