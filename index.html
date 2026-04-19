@@ -10,631 +10,245 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
   <style>
-    body{margin:0;font-family:Arial;background:#f5f5f5}
+    body{
+      margin:0;
+      font-family:Arial;
+      background:#f5f5f5;
+    }
+    
+    /* ================= LOGIN ================= */
     .login{
-      min-height:100vh;          /* 🔥 setinggi layar */
+      min-height:100vh;
       padding:20px;
-      display:flex;              /* 🔥 aktifkan flex */
-      flex-direction:column;     /* 🔥 susun ke bawah */
+      display:flex;
+      flex-direction:column;
       justify-content:flex-start;
-      padding-top:120px;
-      padding-left:40px;      /* 🔥 kiri */
-      padding-right:40px;     /* 🔥 kanan */
+      padding-top:80px;
+      padding-left:20px;
+      padding-right:20px;
     }
-
+    
     .hidden{display:none}
-
-    .overlayVisible {
-      display: flex !important; /* paksa tampil */
-    }
-
+    .overlayVisible{display:flex !important;}
+    
     input,button{
-      width:100%;padding:12px;font-size:36px;margin-top:10px
+      width:100%;
+      padding:12px;
+      font-size:clamp(14px, 4vw, 18px);
+      margin-top:10px;
     }
-
+    
     button{
-      background:#1976d2;color:#fff;border:none;border-radius:6px
+      background:#1976d2;
+      color:#fff;
+      border:none;
+      border-radius:8px;
     }
-
-    /* HEADER */
+    
+    /* ================= HEADER ================= */
     .header{
       position:fixed;
       top:0; left:0; right:0;
       background:#fff;
-      padding-top:10px;
-      padding-bottom:10px;
-      padding-left:16px;
-      padding-right:16px;
-
-      display:flex;              /* 🔥 WAJIB */
-      flex-direction:row;        /* 🔥 ICON KIRI */
-      align-items:center;        /* 🔥 TENGAH VERTIKAL */
-      gap:12px;
-
+      padding:10px 12px;
+    
+      display:flex;
+      align-items:center;
+      gap:10px;
+    
       box-shadow:0 2px 5px rgba(0,0,0,.1);
       z-index:10;
     }
-
-    /* ICON */
+    
     .user-icon{
-      font-size:80px;
+      font-size:clamp(28px, 6vw, 36px);
       color:#1976d2;
-      flex-shrink:0;             /* 🔥 AGAR TIDAK TURUN */
     }
-
-    /* TEXT */
-    .user-text{
-      display:flex;
-      flex-direction:column;     /* 🔥 NAMA ATAS, NISN BAWAH */
-    }
-
-    /* NAMA */
+    
     .nama{
-      font-size:36px;
+      font-size:clamp(14px, 4vw, 18px);
       font-weight:bold;
     }
-
-    /* NISN */
+    
     .nisn{
-      font-size:36px;
+      font-size:clamp(12px, 3.5vw, 16px);
       color:#555;
     }
-
-    /* HEADER PRESENSI */
+    
+    .logout-btn{
+      margin-left:auto;
+      font-size:clamp(24px, 6vw, 32px);
+      color:#e53935;
+    }
+    
+    /* ================= CONTENT ================= */
+    .content{
+      padding:90px 16px 100px;
+      overflow-y:auto;
+    }
+    
+    /* ================= HEADER PRESENSI ================= */
     .presensi-header{
       background:#1976d2;
       color:#fff;
       text-align:center;
-      padding:16px 12px;
+      padding:14px;
       border-radius:10px;
       margin-bottom:16px;
     }
-
+    
     .presensi-title{
-      font-size:48px;
+      font-size:clamp(18px, 5vw, 24px);
       font-weight:bold;
-      letter-spacing:1px;
     }
-
+    
     .presensi-school{
-      font-size:36px;
-      margin-bottom:10px;
+      font-size:clamp(14px, 4vw, 18px);
     }
-
+    
     .presensi-datetime{
-      font-size:32px;
-      opacity:0.95;
+      font-size:clamp(12px, 3.5vw, 16px);
     }
-
+    
     #jamNow{
-      font-size:40px;
+      font-size:clamp(16px, 4.5vw, 20px);
       font-weight:bold;
     }
-
-
-
-    /* CONTENT */
-    .content {
-      padding:150px 40px 140px;
-      overflow-y:auto;   /* wajib */
-      -webkit-overflow-scrolling: touch; /* smooth scroll iOS */
-    }
-
-    .riwayat-title{
-      font-size:48px;
-      font-weight:bold;
-      letter-spacing:1px;
-      margin-top:36px;
-      margin-bottom:24px;
-    }
-
-    /* CARD PRESENSI */
+    
+    /* ================= CARD ================= */
     .card{
-      background:#fff;margin-bottom:15px;
-      padding:24px;border-radius:8px;
-      display:flex;justify-content:space-between;
-      box-shadow:0 1px 3px rgba(0,0,0,.1);
-      border-left:15px solid #e53935 /* 🔴 GARIS MERAH */
-    }
-    .hari{font-size:42px;font-weight:bold}
-    .tanggal{font-size:32px;color:#666}
-    .status{font-size:32px;color:#666}
-    .jam{font-size:42px;font-weight:bold}
-
-    /* JARAK VERTIKAL */
-    .card{
+      background:#fff;
+      margin-bottom:12px;
+      padding:14px;
+      border-radius:10px;
+      display:flex;
+      justify-content:space-between;
       align-items:center;
+      box-shadow:0 1px 3px rgba(0,0,0,.1);
+      border-left:6px solid #e53935;
     }
-
-    /* BOTTOM NAV (Beranda, Moderasi, Presensi, QR Code) */
+    
+    .hari{font-size:clamp(14px,4vw,18px);font-weight:bold}
+    .tanggal{font-size:clamp(12px,3.5vw,14px);color:#666}
+    .jam{font-size:clamp(14px,4vw,18px);font-weight:bold}
+    .status{font-size:clamp(12px,3.5vw,14px);color:#666}
+    
+    /* ================= NAV ================= */
     .nav{
-      position:fixed;bottom:0;left:0;right:0;
-      background:#fff;display:flex;
-      border-top:1px solid #ddd
+      position:fixed;
+      bottom:0; left:0; right:0;
+      background:#fff;
+      display:flex;
+      border-top:1px solid #ddd;
     }
-
+    
     .nav div{
       flex:1;
       text-align:center;
-      padding:10px;
-      font-size:36px;
+      padding:8px;
+      font-size:clamp(10px,3vw,12px);
       color:#777;
-      transition:.2s;
     }
-
+    
     .nav .material-icons{
-      font-size:56px;   /* samakan dengan teks */
+      font-size:clamp(20px,5vw,26px);
     }
-
-    /* MENU AKTIF */
-    .nav div.active{
+    
+    .nav .active{
       color:#1976d2;
       font-weight:bold;
     }
-
-    /* ICON AKTIF */
-    .nav div.active .material-icons{
-      color:#1976d2;
-    }
-
-    .filter-moderasi{
-      display:flex;
-      align-items:stretch;
-      gap:8px;
-      margin-bottom:16px;
-    }
-
-    .filter-moderasi select,
-    .filter-moderasi button{
-      flex:1;
-      height:70px;
-      padding:0 16px;
-      font-size:36px;
-      box-sizing:border-box;
-      margin-top:0 !important;
-    }
-
-    /* SELECT */
-    .filter-moderasi select{
-      background:#fff;
-      border:1px solid #ccc;
-      appearance:none;
-      -webkit-appearance:none;
-      text-align:center;
-      text-align-last:center;
-    }
-
-    /* TAHUN – PALING SEMPIT */
-    .filter-moderasi select:first-child{
-      width:240px;
-      flex:0 0 240px;
-    }
-
-    /* BULAN – SEDANG */
-    .filter-moderasi select:nth-child(2){
-      width:280px;
-      flex:0 0 280px;
-    }
-
-    /* BUTTON TAMPILKAN */
-    .filter-moderasi button{
-      width:70px;
-      flex:0 0 70px;
-      height:70px;
-      padding:0;
-      border-radius:6px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    /* ICON SEARCH */
-    .filter-moderasi button .material-icons{
-      font-size:48px;
-    }
-
-    #moderasi .riwayat-title{
-      margin-top: 0;
-    }
-
+    
+    /* ================= MODERASI ================= */
     .moderasi-item{
       background:#fff;
-      padding:24px;
-      border-radius:8px;
-      margin-bottom:15px;
+      padding:14px;
+      border-radius:10px;
+      margin-bottom:12px;
       display:flex;
       justify-content:space-between;
       box-shadow:0 1px 3px rgba(0,0,0,.1);
+      border-left:6px solid #fb8c00;
     }
-
-    .moderasi-item{
-      border-left:15px solid #fb8c00;
-    }
-
+    
     .moderasi-tgl{
-      font-size:38px;
+      font-size:clamp(14px,4vw,18px);
       font-weight:bold;
     }
-
+    
     .moderasi-ket{
-      font-size:32px;
+      font-size:clamp(12px,3.5vw,14px);
       color:#666;
     }
-
+    
     .status-disetujui{
+      font-size:clamp(12px,3.5vw,14px);
       color:#2e7d32;
       font-weight:bold;
-      font-size:38px;
-      white-space:nowrap;
     }
-
-    /* FORM MODERASI */
-    #overlayModerasi input:not([type="file"]),
-    #overlayModerasi select{
-      width:100%;
-      max-width:100%;
-      box-sizing:border-box;
-      text-align: center;
-      text-align-last: center;
-    }
-
-    #overlayModerasi input,
-    #overlayModerasi select{
-      height:60px;           /* 🔥 lebih pendek dari default */
-      padding:6px 10px;
-      font-size:28px;
-      border-radius:12px; /* 🔥 INI yang bikin melengkung */
-    }
-
-    /* JARAK ANTAR FIELD */
-    #overlayModerasi label{
-      display:block;
-      margin-top:30px;       /* 🔥 jarak antar input */
-      margin-bottom:4px;
-      font-size:36px;
-    }
-
-    #overlayModerasi input[type="file"]{
-      margin-top:6px;
-      font-size:28px;
-      border-radius:12px;
-    }
-
-    /* EFEK TOMBOL DITEKAN */
-    #overlayModerasi button{
-      transition:0.15s;
-    }
-
-    #overlayModerasi button:active{
-      transform:scale(0.96);           /* 🔥 efek ditekan */
-      opacity:0.85;
-    }
-
-    #btnTambahModerasi{
-      width:150px !important;        /* 🔥 ukuran */
-      height:150px !important;       /* 🔥 ukuran */
-      border-radius:50% !important;  /* 🔥 biar bulat */
-
-      bottom:200px !important;       /* posisi */
-      right:40px !important;         /* posisi */
-
-      font-size:90px !important;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      line-height:1;
-    }
-
-    #presensi .riwayat-title{
-      margin-top: 0;
-    }
-
-    /* PERBESAR QR CODE */
-    #qrKode #qrcode {
-      width: 800px;   /* 🔥 perbesar */
-      height: 800px;
-      margin: 20px auto;
-    }
-
-    #qrcode img{
-      width:100%;
-      height:100%;
-    }
-
-    #qrKode h3{
-      font-size:56px;
-      margin-bottom:24px;
-    }
-
+    
+    /* ================= BUTTON FLOAT ================= */
+    #btnTambahModerasi,
     #btnDownloadQR{
       position:fixed;
-
-      width:150px !important;
-      height:150px !important;
+      width:60px !important;
+      height:60px !important;
       border-radius:50% !important;
-
-      bottom:200px !important;
-      right:40px !important;
-
-      background:#1976d2;
-      color:#fff;
-      border:none;
-
+      bottom:90px !important;
+      right:16px !important;
+      font-size:28px !important;
       display:flex;
       align-items:center;
       justify-content:center;
-
-      box-shadow:0 3px 6px rgba(0,0,0,0.2);
-      cursor:pointer;
     }
-
-    #btnDownloadQR .material-icons{
-      font-size:90px;   /* atur sesuai selera */
+    
+    /* ================= QR ================= */
+    #qrKode #qrcode{
+      width:90%;
+      max-width:280px;
+      margin:20px auto;
     }
-
-    /* LOGOUT ICON */
-    .logout-btn{
-      margin-left:auto;        /* 🔥 dorong ke kanan */
-      cursor:pointer;
-      color:#e53935;
-      font-size:56px;
+    
+    #qrcode img{
+      width:100%;
     }
-
-    /* LOGIN HEADER */
-    .login-header{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin-bottom:30px;
-    }
-
-    .login-header .logo img{
-      width:90px;
-      height:90px;
-      object-fit:contain;
-    }
-
-    .login-title{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .login-title h3{
-      margin:0;
-      font-size:40px;
-    }
-
-    .login-title small{
-      font-size:28px;
-      color:#555;
-    }
-
-    /* TEKS PETUNJUK LOGIN */
-    .login-desc{
-      font-size:36px;
-      color:#555;
-      margin-bottom:30px;
-    }
-
-    .login input{
-      margin-bottom:30px;   /* 🔥 jarak ke tombol */
-    }
-
-    /* SAMAKAN BENTUK INPUT NISN & TOMBOL MASUK */
-    .login input,
-    .login button{
-      height:80px;           /* 🔥 tinggi SAMA */
-      border-radius:12px;    /* 🔥 sudut SAMA */
-      font-size:36px;
-    }
-
-    /* RAPikan INPUT agar tidak lebih tinggi */
-    .login input{
-      padding:0 16px;        /* kiri–kanan saja */
-      text-align:center;
-      box-sizing:border-box;
-    }
-
-    /* 🔒 KUNCI INTERAKSI HANYA SAAT LOGIN */
-    #login{
-      height:100vh;
-      overflow:hidden;
-      touch-action:none;              /* matikan pinch zoom */
-      overscroll-behavior:contain;
-    }
-
-    /* INPUT & TOMBOL MASIH BOLEH DIKLIK */
-    #login input,
-    #login button{
-      touch-action:manipulation;
-    }
-
-    /* STATE TOMBOL SAAT DIKLIK */
-    button.loading-state{
-      background:#4caf50 !important; /* 🔥 hijau */
-      cursor:not-allowed;
-    }
-
-    .header-filter{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:16px;
-    }
-
-    .header-filter .riwayat-title{
-      margin:0; /* hilangkan jarak atas */
-    }
-
-    .icon-kalender {
-      font-size: 72px;   /* 🔥 perbesar ikon */
-      color: #1976d2;    /* 🔵 warna biru */
-      cursor: pointer;
-    }
-
-    .label-bulan{
-      font-size:32px;
-      color:#555;
-      margin-top:4px;
-    }
-
+    
+    /* ================= LOADER ================= */
     .loader{
       display:flex;
       justify-content:center;
-      align-items:center;
-      padding:40px 0;
+      padding:30px 0;
     }
-
+    
     .spinner{
-      width:48px;
-      height:48px;
-      border:5px solid #ddd;
-      border-top:5px solid #1976d2;
+      width:36px;
+      height:36px;
+      border:4px solid #ddd;
+      border-top:4px solid #1976d2;
       border-radius:50%;
       animation:spin 0.8s linear infinite;
     }
-
+    
     @keyframes spin{
-      0%{ transform:rotate(0deg); }
-      100%{ transform:rotate(360deg); }
+      0%{transform:rotate(0)}
+      100%{transform:rotate(360deg)}
     }
-
-    /* =========================
-      PILIHAN TAHUN & BULAN
-    ========================= */
-
-    /* 🔵 HEADER BIRU */
-    .flatpickr-months {
-      background: #1976d2 !important;
-      color: white !important;
-      height: 110px !important;
-      border-radius: 12px 12px 0 0;
-      display: flex !important;
-      align-items: center !important;   /* center vertikal */
-      justify-content: center !important; /* center horizontal */
-      position: relative;
+    
+    /* ================= KALENDER ================= */
+    .flatpickr-calendar.open{
+      width:95% !important;
+      max-width:360px;
+      left:50% !important;
+      transform:translateX(-50%) !important;
     }
-
-    /* BULAN + TAHUN */
-    .flatpickr-current-month {
-      color: white !important;
-      font-size: 36px !important;
-
-      padding: 0 !important;     /* 🔥 HAPUS padding aneh */
-      margin: 0 !important;
-
-      line-height: 1.2 !important;
+    
+    /* ================= RESPONSIVE EXTRA ================= */
+    @media (min-width:768px){
+      .content{
+        max-width:500px;
+        margin:auto;
+      }
     }
-
-    /* INPUT TAHUN */
-    .flatpickr-current-month input.cur-year {
-      text-align: center !important;
-      font-size: 36px !important;
-      padding: 0 !important;
-      margin: 0 !important;
-
-      height: auto !important;
-      line-height: 1.2 !important;
-
-      background: transparent !important;
-      color: white !important;
-    }
-
-    /* 🔼 PANAH (BIARKAN POSISI DEFAULT) */
-    .flatpickr-prev-month,
-    .flatpickr-next-month {
-      top: 30px !important;
-    }
-
-    .flatpickr-prev-month {
-      left: 140px !important;
-      right: auto !important;   /* 🔥 WAJIB */
-    }
-
-    .flatpickr-next-month {
-      right: 140px !important;
-      left: auto !important;    /* 🔥 WAJIB */
-    }
-
-    /* SEMBUNYIKAN SVG ASLI */
-    .flatpickr-prev-month svg,
-    .flatpickr-next-month svg {
-      display: none;
-    }
-
-    /* PANAH KIRI */
-    .flatpickr-prev-month::before {
-      content: "‹";
-      font-size: 70px;
-      font-weight: 500;   /* 🔥 super tebal */
-      color: white;
-    }
-
-    /* PANAH KANAN */
-    .flatpickr-next-month::before {
-      content: "›";
-      font-size: 70px;
-      font-weight: 500;   /* 🔥 super tebal */
-      color: white;
-    }
-
-    /* 📦 ISI PUTIH */
-    .flatpickr-innerContainer {
-      background: white;
-      border-radius: 0 0 12px 12px;
-      padding: 20px;
-    }
-
-    /* 🔘 GRID BULAN */
-    .flatpickr-monthSelect-months {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 70px;
-
-      justify-items: center !important; /* 🔥 ini kunci */
-    }
-
-    /* versi font besar */
-    .flatpickr-monthSelect-month {
-      display: grid !important;
-      place-items: center !important;
-
-      font-size: 36px !important;
-
-      height: 90px;
-      width: 90px;
-
-      border-radius: 50%;
-    }
-
-        /* 🔵 BULAN TERPILIH */
-    .flatpickr-monthSelect-month.selected {
-      background: #1976d2 !important; /* biru */
-      color: #fff !important;
-    }
-
-    /* 📦 MODAL POSISI TENGAH */
-    .flatpickr-calendar.open {
-      position: fixed !important;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) !important;
-
-      width: 95% !important;
-      max-width: 620px;
-
-      max-height: 150vh;
-      overflow: hidden;
-
-      z-index: 9999 !important;
-      border-radius: 12px;
-    }
-
-    #overlayKalender.overlayVisible{
-      display:block !important;
-    }
-
   </style>
 </head>
 
