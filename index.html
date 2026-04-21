@@ -163,7 +163,7 @@
     }
 
     .nav .material-icons{
-      font-size:20px;   /* samakan dengan teks */
+      font-size:22px !important;   /* samakan dengan teks */
     }
 
     /* MENU AKTIF */
@@ -269,12 +269,6 @@
     }
 
     /* FORM MODERASI */
-    #overlayModerasi{
-      display:flex;
-      justify-content:center;
-      align-items:flex-start; /* 🔥 ini kunci biar tidak kepotong */
-      padding-top:40px;       /* kasih jarak dari atas */
-    }
     #overlayModerasi > div{
       display:flex;
       flex-direction:column;
@@ -746,7 +740,7 @@
             z-index:100;
           ">
         <div style="
-              background:#fff;padding:30px;border-radius:16px;width:95%;max-width:620px;min-height:750px;
+              background:#fff;padding:30px;border-radius:16px;width:95%;max-width:620px;max-height:90vh;overflow-y:auto;
               box-shadow:0 3px 6px rgba(0,0,0,0.2);
             ">
           <h3 style="font-size:18px;">Buat Moderasi</h3>
