@@ -269,38 +269,26 @@
     }
 
     /* FORM MODERASI */
-    #overlayModerasi input:not([type="file"]),
-    #overlayModerasi select{
-      width:100%;
-      max-width:100%;
-      box-sizing:border-box;
-      text-align: center;
-      text-align-last: center;
+    #overlayModerasi > div{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
-
+    
     #overlayModerasi input,
-    #overlayModerasi select{
-      margin-top:0 !important;
-      height:36px;           /* 🔥 lebih pendek dari default */
+    #overlayModerasi select,
+    #overlayModerasi button{
+      width:100%;
+      box-sizing:border-box;
+      height:36px;
       padding:6px 10px;
       font-size:14px;
-      border-radius:8px; /* 🔥 INI yang bikin melengkung */
-    }
-
-    /* JARAK ANTAR FIELD */
-    #overlayModerasi label{
-      display:block;
-      margin-top:8px;       /* 🔥 jarak antar input */
-      margin-bottom:4px;
-      font-size:14px;
-    }
-
-    #overlayModerasi input[type="file"]{
-      margin-top:0px !important;
-      height:auto;
-      padding:4px 0;
-      font-size:14px;
       border-radius:8px;
+      margin:0;
+    }
+    
+    #overlayModerasi label{
+      font-size:14px;
     }
 
     /* EFEK TOMBOL DITEKAN */
