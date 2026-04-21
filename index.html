@@ -488,6 +488,21 @@
       0%{ transform:rotate(0deg); }
       100%{ transform:rotate(360deg); }
     }
+    
+    .flatpickr-months {
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .flatpickr-calendar.open {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 95%;
+      max-width: 420px;
+      z-index: 9999 !important;
+    }
   </style>
 </head>
 
