@@ -199,19 +199,7 @@
       text-align:center;
       text-align-last:center;
     }
-
-    /* TAHUN – PALING SEMPIT */
-    .filter-moderasi select:first-child{
-      width:110px;
-      flex:0 0 110px;
-    }
-
-    /* BULAN – SEDANG */
-    .filter-moderasi select:nth-child(2){
-      width:150px;
-      flex:0 0 150px;
-    }
-
+  
     /* BUTTON TAMPILKAN */
     .filter-moderasi button{
       width:44px;
@@ -324,11 +312,6 @@
 
     #presensi .riwayat-title{
       margin-top: 0;
-    }
-
-    #qrcode img{
-      width:400px;
-      height:400px;
     }
 
     #qrKode h3{
@@ -457,7 +440,7 @@
     }
 
     .icon-kalender {
-      font-size: 40px;   /* 🔥 perbesar ikon */
+      font-size: 30px;   /* 🔥 perbesar ikon */
       color: #1976d2;    /* 🔵 warna biru */
       cursor: pointer;
     }
@@ -597,7 +580,7 @@
               color:#fff;
               padding:10px;
               border-radius:8px;
-              font-size:12px;
+              font-size:14px;
               font-weight:bold;
               cursor:pointer;
             ">
@@ -647,7 +630,7 @@
             z-index:100;
           ">
         <div style="
-              background:#fff;padding:10px;border-radius:8px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;
+              background:#fff;padding:12px;border-radius:8px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;
               box-shadow:0 3px 6px rgba(0,0,0,0.2);
             ">
           <h3 style="font-size:18px;margin-top:5px;margin-bottom:5px;">Buat Moderasi</h3>
@@ -683,6 +666,7 @@
               style="
                 margin-top:5px;
                 text-align:center;
+                font-size:14px;
                 display:none;
               ">
           </div>
@@ -988,7 +972,7 @@ function loadRiwayatModerasi(){
 function renderModerasi(data){
   if(data.length === 0){
     document.getElementById('listModerasi').innerHTML =
-      '<i style="font-size:14px;">Tidak ada data moderasi</i>';
+      '<i style="font-size:18px;">Tidak ada data moderasi</i>';
     return;
   }
 
@@ -1283,8 +1267,8 @@ function loadQR(){
   // Buat QR Code baru
   const qrcode = new QRCode(document.getElementById('qrcode'), {
     text: user.nisn,
-    width: 600,
-    height: 600,
+    width: 220,
+    height: 220,
     colorDark : "#000000",
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.H
