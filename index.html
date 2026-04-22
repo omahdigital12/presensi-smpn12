@@ -83,7 +83,7 @@
       text-align:center;
       padding:16px 12px;
       border-radius:10px;
-      margin-bottom:16px;
+      margin-bottom:8px;
     }
 
     .presensi-title{
@@ -342,7 +342,7 @@
     }
 
     #btnDownloadQR .material-icons{
-      font-size:40px;   /* atur sesuai selera */
+      font-size:24px;   /* atur sesuai selera */
     }
 
     /* LOGOUT ICON */
@@ -406,6 +406,8 @@
       padding:0 16px;        /* kiri–kanan saja */
       text-align:center;
       box-sizing:border-box;
+      border:1px solid #ccc;   /* 🔥 ini yang menipiskan */
+      outline:none;
     }
 
     /* 🔒 KUNCI INTERAKSI HANYA SAAT LOGIN */
@@ -551,7 +553,7 @@
           gap:5px;
         ">
           <span class="material-icons" style="
-            font-size:20px;
+            font-size:24px;
             color:#1976d2;
             margin-top:4px;
           ">
@@ -559,8 +561,8 @@
           </span>
 
           <div style="
-            font-size:14px;
-            color:#333;
+            font-size:13px;
+            color:#666;
             line-height:1.4;
           ">
             Jln. Pantaisari 2 Pekalongan, Kelurahan Panjang Wetan, 
@@ -630,7 +632,7 @@
             z-index:100;
           ">
         <div style="
-              background:#fff;padding:14px;border-radius:8px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;
+              background:#fff;padding:14px;padding-bottom:20px;border-radius:8px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;
               box-shadow:0 3px 6px rgba(0,0,0,0.2);
             ">
           <h3 style="font-size:18px;margin-top:5px;margin-bottom:5px;">Buat Moderasi</h3>
@@ -972,7 +974,7 @@ function loadRiwayatModerasi(){
 function renderModerasi(data){
   if(data.length === 0){
     document.getElementById('listModerasi').innerHTML =
-      '<i style="font-size:18px;">Tidak ada data moderasi</i>';
+      '<div style="font-size:14px;color:#666;">Riwayat moderasi tidak ditemukan.</i>';
     return;
   }
 
