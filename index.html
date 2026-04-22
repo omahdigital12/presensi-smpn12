@@ -94,11 +94,11 @@
 
     .presensi-school{
       font-size:14px;
-      margin-bottom:10px;
+      margin-bottom:5px;
     }
 
     .presensi-datetime{
-      font-size:13px;
+      font-size:14px;
       opacity:0.95;
     }
 
@@ -314,11 +314,16 @@
       margin-top: 0;
     }
 
+    #qrcode{
+      display:flex;
+      justify-content:center;
+    }
+
     #qrKode h3{
       font-size:18px;
       margin-bottom:24px;
     }
-
+    
     #btnDownloadQR{
       position:fixed;
 
@@ -342,7 +347,7 @@
     }
 
     #btnDownloadQR .material-icons{
-      font-size:24px;   /* atur sesuai selera */
+      font-size:26px;   /* atur sesuai selera */
     }
 
     /* LOGOUT ICON */
@@ -974,7 +979,7 @@ function loadRiwayatModerasi(){
 function renderModerasi(data){
   if(data.length === 0){
     document.getElementById('listModerasi').innerHTML =
-      '<div style="font-size:14px;color:#666;">Riwayat moderasi tidak ditemukan.</i>';
+      '<div style="font-size:16px;color:#666;">Riwayat moderasi tidak ditemukan.</i>';
     return;
   }
 
