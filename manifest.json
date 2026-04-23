@@ -1,7 +1,7 @@
 {
   "name": "Presensi SMPN 12 Pekalongan",
   "short_name": "Presensi",
-  "start_url": ".",
+  "start_url": "https://script.google.com/macros/s/AKfycbxH_aPwoFEBjuP3Ied7MH3HdHWlEDuF47zszWr8kAXda7qaKPaZyxt6G_Md1AMuuRud/exec",
   "display": "standalone",
   "background_color": "#f5f5f5",
   "theme_color": "#1976d2",
