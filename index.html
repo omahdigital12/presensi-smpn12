@@ -1469,6 +1469,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 </script>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('SW aktif'))
+    .catch(err => console.log('SW gagal', err));
+}
+</script>
 </body>
 </html>
