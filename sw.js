@@ -1,4 +1,4 @@
-const CACHE_NAME = 'presensi-v2';
+const CACHE_NAME = 'presensi-v3';
 
 const urlsToCache = [
   './manifest.json',
