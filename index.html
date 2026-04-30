@@ -1284,8 +1284,8 @@ function loadQR(){
   // Buat QR Code baru
   const qrcode = new QRCode(document.getElementById('qrcode'), {
     text: user.nisn,
-    width: 1000,
-    height: 1000,
+    width: 220,
+    height: 220,
     colorDark : "#000000",
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.H
@@ -1293,22 +1293,39 @@ function loadQR(){
 
   // Tombol download
   document.getElementById('btnDownloadQR').onclick = function(){
-    const qrCanvas = document.querySelector('#qrcode canvas');
-    const qrImg = document.querySelector('#qrcode img');
 
-    if(qrCanvas){
-      const link = document.createElement('a');
-      link.href = qrCanvas.toDataURL('image/png');
-      link.download = `QR_NISN_${user.nisn}.png`;
-      link.click();
-    }else if(qrImg){
-      const link = document.createElement('a');
-      link.href = qrImg.src;
-      link.download = `QR_NISN_${user.nisn}.png`;
-      link.click();
-    }else{
-      alert('QR Code belum siap');
-    }
+    // 🔥 container sementara (tidak tampil)
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'fixed';
+    tempDiv.style.left = '-9999px';
+    document.body.appendChild(tempDiv);
+  
+    // 🔥 QR khusus untuk download (besar)
+    const qr = new QRCode(tempDiv, {
+      text: user.nisn,
+      width: 1000,
+      height: 1000,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  
+    setTimeout(() => {
+      const canvas = tempDiv.querySelector('canvas');
+  
+      if(canvas){
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `QR_NISN_${user.nisn}.png`;
+        link.click();
+      }else{
+        alert('Gagal generate QR');
+      }
+  
+      // 🔥 hapus setelah selesai
+      document.body.removeChild(tempDiv);
+  
+    }, 300);
   };
 }
 
