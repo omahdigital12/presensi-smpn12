@@ -822,6 +822,8 @@ function login(){
 
     user = res;
 
+    localStorage.setItem('user', JSON.stringify(res));
+
     document.getElementById('login').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
 
@@ -1310,11 +1312,32 @@ function loadQR(){
   };
 }
 
+function loadLastPage(){
+  const last = localStorage.getItem('lastPage');
+
+  switch(last){
+    case 'menuModerasi':
+      loadModerasi();
+      break;
+    case 'menuPresensi':
+      loadPresensi();
+      break;
+    case 'menuQR':
+      loadQR();
+      break;
+    default:
+      loadBeranda();
+  }
+}
+
 function setActiveMenu(menuId){
   document.querySelectorAll('.nav div')
     .forEach(m => m.classList.remove('active'));
 
   document.getElementById(menuId).classList.add('active');
+
+  // 🔥 simpan halaman
+  localStorage.setItem('lastPage', menuId);
 }
 
 function logout(){
@@ -1322,6 +1345,9 @@ function logout(){
   if(document.fullscreenElement){
     document.exitFullscreen();
   }
+
+  localStorage.removeItem('user');
+  localStorage.removeItem('lastPage');
 
   // reset data
   user = {};
@@ -1360,6 +1386,25 @@ function formatBulanTahun(val){
 
 document.addEventListener('DOMContentLoaded', function(){
 
+  cacheBeranda = null;
+  cacheModerasi = {};
+  cachePresensi = {};
+  
+  // 🔥 AUTO LOGIN SAAT REFRESH (TARUH DI SINI)
+  const savedUser = localStorage.getItem('user');
+
+  if(savedUser){
+    user = JSON.parse(savedUser);
+
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+
+    document.getElementById('nama').innerText = user.nama;
+    document.getElementById('nisnView').innerText = user.nisn;
+
+    loadLastPage();
+  }
+  
   flatpickr("#modTanggal", {
     disableMobile: true,
     clickOpens: false,
